@@ -41,15 +41,21 @@ echo "Enabling BOINC to work with VirtualBox..."
 
 boincContentsMacOS="$boincapp"Contents/MacOS
 
+if [ ! -e "$boincContentsMacOS"/BOINCManager.virtualbox  ]
+then
+    echo "First time running the script"
+    mv "$boincContentsMacOS"/BOINCManager "$boincContentsMacOS"/BOINCManager.virtualbox
 
-mv "$boincContentsMacOS"/BOINCManager "$boincContentsMacOS"/BOINCManager.virtualbox
+    touch "$boincContentsMacOS"/BOINCManager
+    chmod ugo+rx "$boincContentsMacOS"/BOINCManager
 
-touch "$boincContentsMacOS"/BOINCManager
-chmod ugo+rx "$boincContentsMacOS"/BOINCManager
-
-echo  "#!/bin/sh" > "$boincContentsMacOS"/BOINCManager
-echo  "" >> "$boincContentsMacOS"/BOINCManager
-echo  "exec $boincContentsMacOS/BOINCManager.virtualbox -i" >> "$boincContentsMacOS"/BOINCManager
+    echo  "#!/bin/sh" > "$boincContentsMacOS"/BOINCManager
+    echo  "" >> "$boincContentsMacOS"/BOINCManager
+    echo  "exec $boincContentsMacOS/BOINCManager.virtualbox -i" >> "$boincContentsMacOS"/BOINCManager
+else
+    echo "This script has been already executed"
+    echo "Just setting the permissions for Test4Theory"
+fi
 
 chown -R $USER:$GROUP "$boincapp"
 
